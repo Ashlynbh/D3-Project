@@ -4,15 +4,15 @@ var svgHeight = 500;
 
 // Define the chart's margins as an object
 var margin = {
-  top: 60,
-  right: 60,
+  top: 50,
+  right: 90,
   bottom: 60,
-  left: 60
+  left: 50
 };
 
 // Define dimensions of the chart area
-var chartWidth = svgWidth - margin.left - margin.right;
-var chartHeight = svgHeight - margin.top - margin.bottom;
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
 
 // Select body, append SVG area to it, and set its dimensions
 var svg = d3.select("#scatter")
@@ -59,21 +59,30 @@ d3.csv("data.csv").then(function(healthdata) {
 
     // Step 5: Create Circles
     // ==============================
-    var circlesGroup = chartGroup.selectAll("stateCircle")
+    var circlesGroup = chartGroup.selectAll("circle")
     .data(healthdata)
     .enter()
-    .append("stateCircle")
-    .attr("cx", d => xLinearScale(d.povertyh))
+    .append("circle")
+    .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "15")
     .attr("fill", "pink")
+    .classed("stateCircle", true)
     .attr("opacity", ".5");
+    
+    chartGroup.selectAll("text")
+    .data(healthdata)
+    .enter()
+    .append("text")
+    .classed("stateText", true)
+    .text(d => d.abbr)
+    
 
     // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      .offset([80, -60])
+      .offset([-20, 30])
       .html(function(d) {
         return (`${d.state}<br>Poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
       });
@@ -88,21 +97,21 @@ d3.csv("data.csv").then(function(healthdata) {
       toolTip.show(data, this);
     })
       // onmouseout event
-      .on("mouseout", function(data, index) {
+      .on("mouseout", function(data, i) {
         toolTip.hide(data);
       });
 
     // Create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 40)
+      .attr("y", 0 - margin.left + 1)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "aText")
       .text("In Poverty");
 
     chartGroup.append("text")
-      .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+      .attr("transform", `translate(${width / 2}, ${height + margin.top + 0})`)
       .attr("class", "axisText")
       .text("Lacks Healthcare (%)");
   }).catch(function(error) {
