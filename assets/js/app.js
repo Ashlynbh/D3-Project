@@ -66,7 +66,6 @@ d3.csv("data.csv").then(function(healthdata) {
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "15")
-    .attr("fill", "pink")
     .classed("stateCircle", true)
     .attr("opacity", ".5");
     
@@ -75,9 +74,8 @@ d3.csv("data.csv").then(function(healthdata) {
     .enter()
     .append("text")
     .classed("stateText", true)
-    .text(d => d.abbr)
+    .text(d => d.abbr);
     
-
     // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
@@ -108,12 +106,12 @@ d3.csv("data.csv").then(function(healthdata) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "aText")
-      .text("In Poverty");
+      .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 0})`)
       .attr("class", "axisText")
-      .text("Lacks Healthcare (%)");
+      .text("In Poverty");
   }).catch(function(error) {
     console.log(error);
   });
