@@ -68,14 +68,24 @@ d3.csv("data.csv").then(function(healthdata) {
     .attr("r", "15")
     .classed("stateCircle", true)
     .attr("opacity", ".5");
+
     
-    chartGroup.selectAll("text")
-    .data(healthdata)
-    .enter()
-    .append("text")
-    .classed("stateText", true)
-    .text(d => d.abbr);
-    
+    var circleLabels = chartGroup.selectAll(null).data(healthdata).enter().append("text");
+
+    circleLabels
+      .attr("x", function(d) {
+        return xLinearScale(d.poverty);
+      })
+      .attr("y", function(d) {
+        return yLinearScale(d.healthcare);
+      })
+      .text(function(d) {
+        return d.abbr;
+      })
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "10px")
+      .attr("text-anchor", "middle")
+      .attr("fill", "white");
     // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
